@@ -16,6 +16,13 @@ transmission:
   log_driver: journald
   net: "container:openvpn"
   restart: always
+  volumes:
+    - {{PROJECT_DOWNLOAD_DIR}}:/var/lib/transmission-daemon/downloads
+    - {{PROJECT_INCOMPLETE_DOWNLOAD_DIR}}:/var/lib/transmission-daemon/incomplete
+    - {{PROJECT_TRANSMISSION_CONFIG_DIR}}:/var/lib/transmission-daemon
+  environment:
+    - USERID={{PROJECT_USERID}}
+    - GROUPID={{PROJECT_GROUPID}}
   #command: -v "vpn.server.name;username;password"
 transmission-proxy:
   image: dperson/nginx
@@ -24,5 +31,7 @@ transmission-proxy:
     - transmission
   command: -w "http://transmission:9091/transmission;/transmission"
   ports:
-    - "11180:80"
+    - "{{PROJECT_PROXY_PORT}}:80"
   restart: always
+
+# vi: set tabstop=2 expandtab syntax=yaml:
