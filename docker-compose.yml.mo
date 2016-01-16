@@ -11,6 +11,9 @@ openvpn:
   log_driver: journald
   volumes:
     - ./vpn:/vpn
+{{#PROJECT_OPENVPN_COMMAND}}
+  command: {{PROJECT_OPENVPN_COMMAND}}
+{{/PROJECT_OPENVPN_COMMAND}}
 transmission:
   image: dperson/transmission  
   log_driver: journald
@@ -23,7 +26,6 @@ transmission:
   environment:
     - USERID={{PROJECT_USERID}}
     - GROUPID={{PROJECT_GROUPID}}
-  #command: -v "vpn.server.name;username;password"
 transmission-proxy:
   image: dperson/nginx
   log_driver: journald
