@@ -1,0 +1,28 @@
+openvpn:
+  image: dperson/openvpn-client
+  cap_add:
+    - NET_ADMIN
+  devices:
+    - "/dev/net/tun"
+  dns:
+    - 8.8.4.4
+    - 8.8.8.8
+  restart: always
+  log_driver: journald
+  volumes:
+    - ./vpn:/vpn
+transmission:
+  image: dperson/transmission  
+  log_driver: journald
+  net: "container:openvpn"
+  restart: always
+  #command: -v "vpn.server.name;username;password"
+transmission-proxy:
+  image: dperson/nginx
+  log_driver: journald
+  links:
+    - transmission
+  command: -w "http://transmission:9091/transmission;/transmission"
+  ports:
+    - "11180:80"
+  restart: always
